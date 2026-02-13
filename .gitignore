@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Test images & outputs (keep only source code)
+*.png
+*.jpg
+*.jpeg
+*.bmp
+*.gif
+*.webp
+
+# uv
+uv.lock
