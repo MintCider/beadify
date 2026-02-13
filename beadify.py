@@ -247,6 +247,21 @@ def _autocorrelation_period(profile: np.ndarray, min_period: int = 5,
     best_lag, best_val = max(peaks, key=lambda x: x[1])
     if best_val < 0.2:
         raise ValueError(f"Weak autocorrelation peak ({best_val:.2f})")
+
+    # Prefer fundamental frequency over harmonics: when adjacent blocks share
+    # the same color the gradient profile has gaps, boosting harmonics above
+    # the true period.  If a smaller lag divides the strongest lag and is
+    # itself reasonably strong, it is the real block size.
+    for lag, val in sorted(peaks, key=lambda x: x[0]):
+        if lag >= best_lag:
+            break
+        if val < 0.3 or val < best_val * 0.4:
+            continue
+        ratio = best_lag / lag
+        nearest_int = round(ratio)
+        if nearest_int >= 2 and abs(ratio - nearest_int) / nearest_int < 0.15:
+            return lag
+
     return best_lag
 
 
